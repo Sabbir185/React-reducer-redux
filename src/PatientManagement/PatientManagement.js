@@ -13,6 +13,9 @@ const patientReducer = (state, action) => {
             }
             const allPatient = [...state.patients, newPatient];
             return {patients: allPatient};
+        case 'delete':
+            const remaining = state.patients.filter( pt => pt.id !== action.id)
+            return {patients: remaining}
         default:
             throw new Error();
     }
@@ -34,14 +37,15 @@ const PatientManagement = () => {
         console.log(inputRef.current.value)
     }
 
+
     return (
         <>
             <h4>Total Patient List : {state.patients.length}</h4>
             <form onSubmit={handleForm}>
-                <input ref={inputRef} ></input>
+                <input ref={inputRef} placeholder='name'></input>
             </form>
             {
-                state.patients.map(pt=> <li key={pt.id}> {pt.name} </li>)
+                state.patients.map( pt=> <li onClick={()=>dispatch({type:'delete', id: pt.id})} key={pt.id} > {pt.name} </li>)
             }
         </>
     );
